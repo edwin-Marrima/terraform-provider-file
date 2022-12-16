@@ -83,7 +83,7 @@ func (cl Client) jsonAndYaml(b []byte, t Transformer) error {
 		marshal:   supportedFileExtEncode[filepath.Ext(t.outputPath)],
 	}
 	//If we try to unmarshal the an empty json (empty byte array=>b=0) we will get 'unexpected end of JSON input' error
-	//The conditional below iams to work around this error
+	//The conditional below aims to work around this error
 	if len(b) > 0 {
 		err := dataDecoder.unmarshal(b, &dstContent)
 		if err != nil {
