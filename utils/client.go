@@ -59,11 +59,9 @@ func (cl Client) FileTransform(path, content, outputPath string, options ...func
 		return err
 	}
 	defer file.Close()
-	//retrieve file size
 
 	fileInfo, err := file.Stat()
-	// create slice that hold file content in bytes
-
+	// create slice that hold file content in bytes, with size equal to file size
 	b := make([]byte, fileInfo.Size())
 	_, err = file.Read(b)
 	if err != nil {
@@ -82,8 +80,8 @@ func (cl Client) jsonAndYaml(b []byte, t Transformer) error {
 		unmarshal: supportedFileExtDecode[filepath.Ext(t.path)],
 		marshal:   supportedFileExtEncode[filepath.Ext(t.outputPath)],
 	}
-	//If we try to unmarshal the an empty json (empty byte array=>b=0) we will get 'unexpected end of JSON input' error
-	//The conditional below aims to work around this error
+	// Unmarshal empty json/map (empty byte array=>b=0) we will get 'unexpected end of JSON input' error
+	//The conditional below aims to workaround this error
 	if len(b) > 0 {
 		err := dataDecoder.unmarshal(b, &dstContent)
 		if err != nil {
@@ -146,7 +144,10 @@ func (cl Client) dotEnv(b []byte, path, content string) error {
 
 func (cl Client) ReadHandler(path string) (*os.File, error) {
 	dirPath, _ := filepath.Split(path)
-	os.Mkdir(dirPath, 0777)
+	// check if directory exists, if not create new
+	if _, err := os.Stat(dirPath); os.IsNotExist(err) {
+		os.Mkdir(dirPath, 0777)
+	}
 	// verify if file exists and return the existing file if it exists
 	if _, err := os.Stat(path); err == nil {
 		file, err := os.Open(path)
