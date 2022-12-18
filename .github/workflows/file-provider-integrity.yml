@@ -3,7 +3,8 @@ name: Go
 on:
   push:
     branches: [ "*","*/*", "!master" ]
-  
+  pull_request:
+    branches: [ "*","*/*" ]
 
 jobs:
   validate_provider_integrity:
@@ -17,6 +18,8 @@ jobs:
       uses: actions/setup-go@v3
       with:
         go-version: 1.19
+    - name: current dir
+      run: ls -la
 
     - name: Test all logic behind the provider
       run: go test -v ./...
