@@ -2,6 +2,7 @@ package utils
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"path/filepath"
 	"testing"
@@ -11,8 +12,8 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-//TODO: explore test cleanup
-//<Test-setup>
+// TODO: explore test cleanup
+// <Test-setup>
 var testFile []TestFiles
 
 type TestFiles struct {
@@ -48,13 +49,14 @@ func tearDown() {
 	}
 }
 
-//</Test-setup>
+// </Test-setup>
 func TestFolder(t *testing.T) {
 	t.Run("Create folder when the one provided in the path does not exist", func(t *testing.T) {
 		cl := Client{}
 		filePath := []string{"./test_artifact/subfolder/file-001.json"}
 		for _, path := range filePath {
-			_, _ = cl.ReadHandler(path)
+			_, err := cl.ReadHandler(path)
+			fmt.Println("ERROR_CONTENT:", err)
 			dirPath, _ := filepath.Split(path)
 			assert.DirExists(t, dirPath)
 			//clean test
@@ -70,8 +72,8 @@ func TestFolder(t *testing.T) {
 			dirPath, _ := filepath.Split(path)
 			//create folder
 			os.Mkdir(dirPath, 0777)
-			_, _ = cl.ReadHandler(path)
-
+			_, err := cl.ReadHandler(path)
+			fmt.Println("ERROR_CONTENT_@:", err)
 			assert.DirExists(t, dirPath)
 
 			//clean test
