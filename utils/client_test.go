@@ -53,7 +53,7 @@ func tearDown() {
 func TestFolder(t *testing.T) {
 	t.Run("Create folder when the one provided in the path does not exist", func(t *testing.T) {
 		cl := Client{}
-		filePath := []string{"./test_artifact/subfolder/file-001.json"}
+		filePath := []string{"./test_artifact/subfolder/file-0012.json"}
 		for _, path := range filePath {
 			_, err := cl.ReadHandler(path)
 			fmt.Println("ERROR_CONTENT:", err)
@@ -67,7 +67,7 @@ func TestFolder(t *testing.T) {
 	})
 	t.Run("Don't create folder when it already exists", func(t *testing.T) {
 		cl := Client{}
-		filePath := []string{"./test_artifact/subfolder/file-001.json"}
+		filePath := []string{"./test_artifact/subfolder/file-0013.json"}
 		for _, path := range filePath {
 			dirPath, _ := filepath.Split(path)
 			//create folder
