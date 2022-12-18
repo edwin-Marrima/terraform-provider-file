@@ -12,7 +12,7 @@ description: |-
 
 The `file_transformer` data source provides an interface between terraform and the file system running terraform, allowing to overwrite, delete/edit file contents. The `file_transformer` data source can be used with existing or non-existing files, currently supported file extensions are json, .env and yaml (or yml).
 			
-~> **Warning** It is necessary that you grant sufficient permissions (_chmod +rw_) so that the provider can read and make changes to the contents of the specified file. If the file does not exist, the `file` provider will try to create a new file or subfolder, so the permissions must also cover this situation.
+~> **Warning** It is necessary that you grant enough permissions (_chmod +rw_) so that the provider can read and make changes to the contents of the specified file. If the file does not exist, the `file` provider will try to create a new file or subfolder, so the permissions must also cover this situation.
 
 ## Example Usage
 
