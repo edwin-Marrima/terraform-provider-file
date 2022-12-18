@@ -51,7 +51,7 @@ data "file_transformer" "foo" {
 ```
 ### Set environment variables in containers (docker-compose.yml)
 
-~> NOTE: to ensure portability even when the file extension is yml we add values using JSON syntax
+~> NOTE: even when the file extension is yml we add/edit values using JSON syntax.
 
 ```terraform
 
@@ -80,7 +80,7 @@ The following arguments are supported:
 
 * `output` - (Optional) Destination file. Defaults to the value of `file` property.
 
-* `override_array_items` - (Optional) In situations where the object defined in the `items` field contains a _Key_ whose associated value is array and the same _Key_ exists (on the same level) in the specified file, if this field is false then the key values (defined in the `items` field and specified file) will be merged, on the other hand if this field is set to true, then the value associated with the same _Key_ in the selected file will be replaced by the value (associated with the _Key_) defined in the `items` field. This setting is only applicable to json and yaml files. Defaults to `true`.
+* `override_array_items` - (Optional) In situations where the object defined in the `items` field contains a _Key_ whose associated value is array and the same _Key_ exists (on the same level) in the specified file, if this property is false then the key values (defined in the `items` field and specified file) will be merged, on the other hand if this property is set to true, then the value associated with the same _Key_ in the selected file will be replaced by the value (associated with the _Key_) defined in the `items` field. This setting is only applicable to json and yaml files. Defaults to `true`.
 
 
 
