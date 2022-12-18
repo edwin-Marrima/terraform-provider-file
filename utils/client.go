@@ -147,8 +147,9 @@ func (cl Client) ReadHandler(path string) (*os.File, error) {
 	dirPath, _ := filepath.Split(path)
 	// check if directory exists and create new one if not
 	if _, err := os.Stat(dirPath); os.IsNotExist(err) {
-		fmt.Println("AAAAAAAAAX:", err)
-		os.Mkdir(dirPath, 0777)
+		err := os.Mkdir(dirPath, 0777)
+		return nil, err
+
 	}
 
 	//If the file does not exist, a new file is created.
