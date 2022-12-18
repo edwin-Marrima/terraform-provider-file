@@ -145,6 +145,7 @@ func (cl Client) dotEnv(b []byte, path, content string) error {
 
 func (cl Client) ReadHandler(path string) (*os.File, error) {
 	dirPath, _ := filepath.Split(path)
+	fmt.Println("AAAAAAAAAAAAA:" + dirPath)
 	// check if directory exists and create new one if not
 	if _, err := os.Stat(dirPath); os.IsNotExist(err) {
 		os.Mkdir(dirPath, 0777)
