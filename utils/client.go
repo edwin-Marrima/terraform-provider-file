@@ -149,11 +149,7 @@ func (cl Client) ReadHandler(path string) (*os.File, error) {
 	if _, err := os.Stat(dirPath); os.IsNotExist(err) {
 		os.Mkdir(dirPath, 0777)
 	}
-	// verify if file exists and return the existing file if it exists
-	if _, err := os.Stat(path); err == nil {
-		file, err := os.Open(path)
-		return file, err
-	}
+
 	//If the file does not exist, a new file is created.
 	file, err := os.OpenFile(path, os.O_CREATE|os.O_RDWR, 0777)
 
