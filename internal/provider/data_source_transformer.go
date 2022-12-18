@@ -83,7 +83,7 @@ func resourceTransformerRead(ctx context.Context, d *schema.ResourceData, meta i
 		return diag.Diagnostics{
 			{
 				Severity: diag.Error,
-				Summary:  "Query Handling Failed",
+				Summary:  "",
 				Detail:   err.Error(),
 			},
 		}
