@@ -51,7 +51,7 @@ func tearDown() {
 
 // </Test-setup>
 func TestFolder(t *testing.T) {
-	t.Skip()
+
 	t.Run("Create folder when the one provided in the path does not exist", func(t *testing.T) {
 		cl := Client{}
 		filePath := []string{"./test_artifact/subfolder/file-0012.json"}
