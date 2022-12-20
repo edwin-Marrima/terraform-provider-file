@@ -73,9 +73,8 @@ func TestFolder(t *testing.T) {
 		for _, path := range filePath {
 			dirPath, _ := filepath.Split(path)
 			//create folder
-			err := os.MkdirAll(dirPath, 0777)
-			fmt.Println("AAAAAAAAA:", err)
-			_, err = cl.ReadHandler(path)
+			os.MkdirAll(dirPath, 0777)
+			_, err := cl.ReadHandler(path)
 			fmt.Println("ERROR_CONTENT_@:", err)
 			assert.DirExists(t, dirPath)
 
@@ -89,7 +88,7 @@ func TestFolder(t *testing.T) {
 
 func TestFile(t *testing.T) {
 	t.Run("Create file when the one provided in the path does not exist", func(t *testing.T) {
-		t.Skip()
+
 		cl := Client{}
 		filePath := []string{"./test_artifact/file-001.json"}
 		for _, path := range filePath {
@@ -101,13 +100,14 @@ func TestFile(t *testing.T) {
 			})
 		}
 	})
-	t.Run("Dont overlap file content when provided file already exists", func(t *testing.T) {
+	t.Run("Don't overlap file content when provided file already exists", func(t *testing.T) {
 		cl := Client{}
 		filePath := []string{testFile[0].path}
 		for _, path := range filePath {
-			fileData, _ := os.ReadFile(path)
+			fileData, err := os.ReadFile(path)
 			b := make([]byte, 10)
 			// read file
+			fmt.Println("CCCTV:", err)
 			file, _ := cl.ReadHandler(path)
 			n, _ := file.Read(b)
 			assert.Contains(t, string(fileData), string(b[:n]))
