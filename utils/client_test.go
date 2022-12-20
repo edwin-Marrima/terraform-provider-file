@@ -88,6 +88,7 @@ func TestFolder(t *testing.T) {
 
 func TestFile(t *testing.T) {
 	t.Run("Create file when the one provided in the path does not exist", func(t *testing.T) {
+		t.Skip()
 		cl := Client{}
 		filePath := []string{"./test_artifact/file-001.json"}
 		for _, path := range filePath {
