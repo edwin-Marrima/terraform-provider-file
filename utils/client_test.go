@@ -73,7 +73,7 @@ func TestFolder(t *testing.T) {
 		for _, path := range filePath {
 			dirPath, _ := filepath.Split(path)
 			//create folder
-			os.Mkdir(dirPath, 0777)
+			os.MkdirAll(dirPath, 0777)
 			_, err := cl.ReadHandler(path)
 			fmt.Println("ERROR_CONTENT_@:", err)
 			assert.DirExists(t, dirPath)
