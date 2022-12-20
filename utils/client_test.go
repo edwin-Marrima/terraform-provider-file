@@ -102,12 +102,19 @@ func TestFile(t *testing.T) {
 	})
 	t.Run("Don't overlap file content when provided file already exists", func(t *testing.T) {
 		cl := Client{}
-		filePath := []string{testFile[0].path}
+		filePath := []string{"./test_artifact/init-file-001.json"}
 		for _, path := range filePath {
+			_, _ = filepath.Split(path)
+			fileT, _ := os.OpenFile(path, os.O_CREATE|os.O_RDWR, 0666)
+			defer fileT.Close()
+
+			fileT.WriteAt([]byte(`{"coach":"Mourinho"}`), 0)
+
 			fileData, err := os.ReadFile(path)
 			b := make([]byte, 10)
 			// read file
 			fmt.Println("CCCTV:", err)
+
 			file, _ := cl.ReadHandler(path)
 			n, _ := file.Read(b)
 			assert.Contains(t, string(fileData), string(b[:n]))
