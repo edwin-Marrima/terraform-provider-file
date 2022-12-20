@@ -2,7 +2,6 @@ package utils
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 	"path/filepath"
 	"testing"
@@ -56,8 +55,7 @@ func TestFolder(t *testing.T) {
 		cl := Client{}
 		filePath := []string{"./test_artifact/subfolder/file-0012.json"}
 		for _, path := range filePath {
-			_, err := cl.ReadHandler(path)
-			fmt.Println("ERROR_CONTENT:", err)
+			cl.ReadHandler(path)
 			dirPath, _ := filepath.Split(path)
 			assert.DirExists(t, dirPath)
 			//clean test
@@ -74,8 +72,7 @@ func TestFolder(t *testing.T) {
 			dirPath, _ := filepath.Split(path)
 			//create folder
 			os.MkdirAll(dirPath, 0777)
-			_, err := cl.ReadHandler(path)
-			fmt.Println("ERROR_CONTENT_@:", err)
+			cl.ReadHandler(path)
 			assert.DirExists(t, dirPath)
 
 			//clean test
@@ -110,10 +107,8 @@ func TestFile(t *testing.T) {
 
 			fileT.WriteAt([]byte(`{"coach":"Mourinho"}`), 0)
 
-			fileData, err := os.ReadFile(path)
+			fileData, _ := os.ReadFile(path)
 			b := make([]byte, 10)
-			// read file
-			fmt.Println("CCCTV:", err)
 
 			file, _ := cl.ReadHandler(path)
 			n, _ := file.Read(b)
