@@ -11,8 +11,8 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-//TODO: explore test cleanup
-//<Test-setup>
+// TODO: explore test cleanup
+// <Test-setup>
 var testFile []TestFiles
 
 type TestFiles struct {
@@ -48,13 +48,14 @@ func tearDown() {
 	}
 }
 
-//</Test-setup>
+// </Test-setup>
 func TestFolder(t *testing.T) {
+
 	t.Run("Create folder when the one provided in the path does not exist", func(t *testing.T) {
 		cl := Client{}
-		filePath := []string{"./test_artifact/subfolder/file-001.json"}
+		filePath := []string{"./test_artifact/subfolder/file-0012.json"}
 		for _, path := range filePath {
-			_, _ = cl.ReadHandler(path)
+			cl.ReadHandler(path)
 			dirPath, _ := filepath.Split(path)
 			assert.DirExists(t, dirPath)
 			//clean test
@@ -64,14 +65,14 @@ func TestFolder(t *testing.T) {
 		}
 	})
 	t.Run("Don't create folder when it already exists", func(t *testing.T) {
+
 		cl := Client{}
-		filePath := []string{"./test_artifact/subfolder/file-001.json"}
+		filePath := []string{"./test_artifact/subfolder/file-0013.json"}
 		for _, path := range filePath {
 			dirPath, _ := filepath.Split(path)
 			//create folder
-			os.Mkdir(dirPath, 0777)
-			_, _ = cl.ReadHandler(path)
-
+			os.MkdirAll(dirPath, 0777)
+			cl.ReadHandler(path)
 			assert.DirExists(t, dirPath)
 
 			//clean test
@@ -84,6 +85,7 @@ func TestFolder(t *testing.T) {
 
 func TestFile(t *testing.T) {
 	t.Run("Create file when the one provided in the path does not exist", func(t *testing.T) {
+
 		cl := Client{}
 		filePath := []string{"./test_artifact/file-001.json"}
 		for _, path := range filePath {
@@ -95,13 +97,19 @@ func TestFile(t *testing.T) {
 			})
 		}
 	})
-	t.Run("Dont overlap file content when provided file already exists", func(t *testing.T) {
+	t.Run("Don't overlap file content when provided file already exists", func(t *testing.T) {
 		cl := Client{}
-		filePath := []string{testFile[0].path}
+		filePath := []string{"./test_artifact/init-file-001.json"}
 		for _, path := range filePath {
+			_, _ = filepath.Split(path)
+			fileT, _ := os.OpenFile(path, os.O_CREATE|os.O_RDWR, 0666)
+			defer fileT.Close()
+
+			fileT.WriteAt([]byte(`{"coach":"Mourinho"}`), 0)
+
 			fileData, _ := os.ReadFile(path)
 			b := make([]byte, 10)
-			// read file
+
 			file, _ := cl.ReadHandler(path)
 			n, _ := file.Read(b)
 			assert.Contains(t, string(fileData), string(b[:n]))

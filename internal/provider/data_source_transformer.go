@@ -28,27 +28,37 @@ func dataSourceTransformer() *schema.Resource {
 			"so the permissions must also cover these situations.",
 		Schema: map[string]*schema.Schema{
 			"file": &schema.Schema{
-				Description:  "",
+				Description: "(Required) Source file, the content provided in `items` field is merged with the content of this file. If  " +
+					"`output` property is empty, the merge result will be saved in the given file. Currently supported file " +
+					"extensions are _json, .env and yaml (or yml)_. When the file extension is _.env_ only _file_ and _items_ properties are " +
+					"taken into account (so filling in the other properties has no effect)",
 				Required:     true,
 				Type:         schema.TypeString,
 				ValidateFunc: validateFileExt([]string{".json", ".yaml", ".yml", ".env"}),
 			},
 			"output": &schema.Schema{
-				Description:  "c",
+				Description:  "(Optional) Destination file. Defaults to the value of `file` property.",
 				Optional:     true,
 				Type:         schema.TypeString,
 				ValidateFunc: validateFileExt([]string{".json", ".yaml", ".yml"}),
 			},
 			"override_array_items": &schema.Schema{
-				Description: "b",
-				Optional:    true,
-				Default:     true,
-				Type:        schema.TypeBool,
+				Description: "(Optional) In situations where the object defined in the `items` field contains a _Key_ whose " +
+					"associated value is array and the same _Key_ exists (on the same level) in the specified file, if this property " +
+					"is false then the key values (defined in the `items` field and specified file) will be merged, on the other hand " +
+					"if this property is set to true, then the value associated with the same _Key_ in the selected file will be replaced " +
+					"by the value (associated with the _Key_) defined in the `items` field. This setting is only applicable to json and yaml files. " +
+					"Defaults to `true`",
+				Optional: true,
+				Default:  true,
+				Type:     schema.TypeBool,
 			},
 			"items": &schema.Schema{
-				Description: "a",
-				Required:    true,
-				Type:        schema.TypeString,
+				Description: "Content to be placed in the file, it's necessary to encode items using JSON syntax " +
+					"(only when file extension is json or yaml), thus we advise to use the terraform built-in function " +
+					"[`jsonencode`](https://developer.hashicorp.com/terraform/language/functions/jsonencode) to assign any value to this property. ",
+				Required: true,
+				Type:     schema.TypeString,
 			},
 		},
 	}
@@ -73,7 +83,7 @@ func resourceTransformerRead(ctx context.Context, d *schema.ResourceData, meta i
 		return diag.Diagnostics{
 			{
 				Severity: diag.Error,
-				Summary:  "Query Handling Failed",
+				Summary:  "",
 				Detail:   err.Error(),
 			},
 		}

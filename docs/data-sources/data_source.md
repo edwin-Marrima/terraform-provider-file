@@ -10,9 +10,9 @@ description: |-
 
 # file_transformer (Data Source)
 
-The `file_transformer` data source provides an interface between terraform and the file system running terraform, allowing to overwrite, delete/edit file contents. The `file_transformer` data source can be used with existing or non-existing files, currently supported file extensions are json, .env and yaml (or yml)
+The `file_transformer` data source provides an interface between terraform and the file system running terraform, allowing to overwrite, delete/edit file contents. The `file_transformer` data source can be used with existing or non-existing files, currently supported file extensions are json, .env and yaml (or yml).
 			
-~> **Warning** It is necessary that you grant sufficient permissions (_chmod +rw_) so that the provider can read and make changes to the contents of the specified file .If the file does not exist, the `file` provider will try to create a new file or subfolder, so the permissions must also cover these situations.
+~> **Warning** It is necessary that you grant enough permissions (_chmod +rw_) so that the provider can read and make changes to the contents of the specified file. If the file does not exist, the `file` provider will try to create a new file or subfolder, so the permissions must also cover this situation.
 
 ## Example Usage
 
@@ -30,6 +30,7 @@ data "file_transformer" "foo" {
 	)
 }
 ```
+
 ### DotEnv File (.env)
 
 ~> NOTE: When the file extension is _.env_ only _file_ and items are taken into account (so filling in the other properties has no effect).
@@ -48,18 +49,38 @@ data "file_transformer" "foo" {
 	EOT
 }
 ```
+### Set environment variables in containers (docker-compose.yml)
+
+~> NOTE: even when the file extension is yml we add/edit values using JSON syntax.
+
+```terraform
+
+data "file_transformer" "foo" {
+    file                 = "./docker-compose.yml"
+    //allows previously defined environment variables to not be overridden
+    override_array_items = false
+    items = jsonencode(
+        {
+          "my-container" = {
+              environment = ["NODE_ENV=production"]
+          }
+        }
+    )   
+}
+
+```
 
 ## Argument Reference
 
 The following arguments are supported:
 
-* `file` - (Required) Source file, if  `output` property is empty, the content provided in the `items` field will be merged with the content of this file and the result of the merge will be saved in the given file. Currently supported file extensions are _json, .env and yaml (or yml)_. 
+* `file` - (Required) Source file, the content provided in `items` field is merged with the content of this file. If  `output` property is empty, the merge result will be saved in the given file. Currently supported file extensions are _json, .env and yaml (or yml)_. When the file extension is _.env_ only _file_ and _items_ properties are taken into account (so filling in the other properties has no effect).
 
-* `items` - (Required) Content to be placed in the file, however it's necessary to encode the value to a string using JSON syntax, thus we advise to use the terraform built-in function `jsonencode` to assign any value to this property. 
+* `items` - (Required) Content to be placed in the file, it's necessary to encode items using JSON syntax (only when file extension is json or yaml), thus we advise to use the terraform built-in function [`jsonencode`](https://developer.hashicorp.com/terraform/language/functions/jsonencode) to assign any value to this property. 
 
-* `output` - (Optional) Destination file. Defaults to the file given in `file` property.
+* `output` - (Optional) Destination file. Defaults to the value of `file` property.
 
-* `override_array_items` - (Optional) In situations where the object defined in the `items` field contains a _Key_ whose associated value is array and the same _Key_ exists (on the same level) in the specified file, if this field is false then the key values (defined in the `items` field and specified file) will be merged, on the other hand if this field is set to true, then the value associated with the same _Key_ in the selected file will be replaced by the value (associated with the _Key_) defined in the `items` field. This setting is only applicable to json and yaml files. Defaults to `true`.
+* `override_array_items` - (Optional) In situations where the object defined in the `items` field contains a _Key_ whose associated value is array and the same _Key_ exists (on the same level) in the specified file, if this property is false then the key values (defined in the `items` field and specified file) will be merged, on the other hand if this property is set to true, then the value associated with the same _Key_ in the selected file will be replaced by the value (associated with the _Key_) defined in the `items` field. This setting is only applicable to json and yaml files. Defaults to `true`.
 
 
 

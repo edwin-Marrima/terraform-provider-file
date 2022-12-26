@@ -23,13 +23,12 @@ data "file_transformer" "name" {
 data "file_transformer" "namex" {
   file                 = "./abcd.yml"
   override_array_items = true
+ 
   items = jsonencode(
-				{
-					"abc"="old"
-					"aaa" = ["aa","bb","12"]
-						c = {
-							"name"="marrima"
-						}
-					}
-	)
+          {
+            "my-container" = {
+                environment = ["NODE_ENV=production"]
+            }
+          }
+  ) 
 }
