@@ -12,7 +12,7 @@ description: |-
 
 Terraform's design allows it to be more than an _IAC_ tool, terraform can be used to streamline the _CI/CD process_. 
 
-After running _terraform apply_ depending on the resource a lot of metadata are generated, this metadata in many situations needs to be consumed by applications, however, since we cannot predict the value assigned to resources metadata, we need to finish creating the resource and then send the value to the consumer, for instance, after creating a s3 bucket there may be a need to pass the _arn_ to _docker-compose.yml_ file as environment variable, _.env_ file or even a JSON file that contains configurations. This `terraform-provider` provides you with a user-friendly way to inject terraform-generated data into files.
+After running _terraform apply_ depending on the resource a lot of metadata are generated, this metadata in many situations needs to be consumed outside of Terraform, however, since we cannot predict the value assigned to resources metadata, we need to finish creating the resource and then send the value to the consumer, for instance, after creating S3 bucket there may be a need to pass the _ARN_ to _docker-compose.yml_ file as environment variable, _.env_ file or even a JSON file that contains configurations. This `terraform-provider` provides you with a user-friendly way to inject terraform-generated data into files.
 
 
 

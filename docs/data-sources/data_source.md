@@ -16,7 +16,7 @@ The `file_transformer` data source provides an interface between terraform and t
 
 ## Example Usage
 
-### Convert file with json format to yaml
+### Convert file from json to yaml
 
 ```terraform
 data "file_transformer" "foo" {
